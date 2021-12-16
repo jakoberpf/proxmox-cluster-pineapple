@@ -1,0 +1,8 @@
+---
+- name: Preprare the development machine with basic settings, packages and networking
+  hosts: all
+
+  roles:
+    - role: hypervisor/proxmox 
+      vars: 
+        pve_reboot_on_kernel_update: false

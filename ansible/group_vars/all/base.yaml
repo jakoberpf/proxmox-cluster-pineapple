@@ -1,0 +1,76 @@
+---
+pve_group: backup
+pve_watchdog: ipmi
+# pve_ssl_private_key: "{{ lookup('file', pve_group + '/' + inventory_hostname + '.key') }}"
+# pve_ssl_certificate: "{{ lookup('file', pve_group + '/' + inventory_hostname + '.pem') }}"
+pve_cluster_enabled: no
+pve_groups:
+  - name: administrators
+    comment: Administrators
+  - name: automation
+    comment: Automation Users
+  - name: developers
+    comment: Developers
+pve_users:
+  - name: terraform@pve
+    email: terraform@automation.local
+    password: "terraform"
+    firstname: Terraform
+    lastname: Automation User
+    comment: "This is the user for all terraform automation scripts"
+    groups: [ "automation" ]
+  - name: jakoberpf@pve
+    email: jakoberpf@developer.local
+    password: "jakoberpf"
+    firstname: Jakob
+    lastname: Erpf
+    comment: ""
+    groups: [ "developers" ]
+  - name: fabianerpf@pve
+    email: fabianerpf@developer.local
+    password: "fabianerpf"
+    firstname: Fabian
+    lastname: Erpf
+    comment: ""
+    groups: [ "developers" ]
+pve_acls:
+  - path: /
+    roles: [ "Administrator" ]
+    groups: [ "administrators" ]
+  - path: /
+    roles: [ "Terraform" ]
+    groups: [ "automation" ]
+pve_roles:
+  - name: Monitoring
+    privileges:
+      - "Sys.Modify"
+      - "Sys.Audit"
+      - "Datastore.Audit"
+      - "VM.Monitor"
+      - "VM.Audit"
+  - name: Terraform
+    privileges:
+      - "VM.Allocate"
+      - "VM.Clone"
+      - "VM.Config.CDROM"
+      - "VM.Config.CPU"
+      - "VM.Config.Cloudinit"
+      - "VM.Config.Disk"
+      - "VM.Config.HWType"
+      - "VM.Config.Memory"
+      - "VM.Config.Network"
+      - "VM.Config.Options"
+      - "VM.Monitor"
+      - "VM.Audit"
+      - "VM.PowerMgmt"
+      - "Datastore.AllocateSpace"
+      - "Datastore.Audit"
+# pve_storages:
+#   - name: localdir
+#     type: dir
+#     content: [ "images", "iso", "backup" ]
+#     path: /plop
+#     maxfiles: 4
+# pve_ssh_port: 22
+
+# interfaces_template: "interfaces-{{ pve_group }}.j2"

@@ -1,0 +1,29 @@
+---
+- name: Install generic needed packages
+  apt:
+    name:
+    - samba
+    - samba-vfs-modules
+    state: latest
+    cache_valid_time: 3600
+
+- name: Start samba service, if not started
+  ansible.builtin.service:
+    name: smbd
+    state: started
+
+# TODO check if users already exist
+- name: Create samba users
+  shell: "(echo {{ item['smbpasswd'] }}; echo {{ item['smbpasswd'] }}) | smbpasswd -s -a {{ item['name'] }}"
+  with_items:
+    - "{{users}}"
+
+- name: Configuring samba shares
+  template:
+    src: smb.conf
+    dest: /etc/samba/smb.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart smbd

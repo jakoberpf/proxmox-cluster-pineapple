@@ -1,0 +1,32 @@
+---
+- name: Preprare the development machine with basic settings, packages and networking
+  hosts: all
+
+  tasks:
+    - name: Install basic packages
+      become: yes
+      apt:
+        update_cache: yes
+        pkg:
+          - timeshift
+        state: present
+      register: apt_action
+      retries: 100
+      until: apt_action is success or ('Failed to lock apt for exclusive operation' not in apt_action.msg and '/var/lib/dpkg/lock' not in apt_action.msg)
+
+    # - name: Setup timeshift snapshot device
+    #   become: yes
+    #   shell: timeshift --snapshot-device /dev/sdf
+
+    # - name: Setup timeshift snapshot device
+    #   become: yes
+    #   shell: timeshift --btrfs
+
+    # - name: Setup timeshift snapshot device
+    #   become: yes
+    #   shell: btrfs quota enable /
+
+    # - name: Setup timeshift snapshot device
+    #   become: yes
+    #   shell: timeshift --create --comments "A clean Ubuntu 20.04LTS install with basic packages and settings"
+

@@ -1,0 +1,14 @@
+---
+# convert to role https://ryan.himmelwright.net/post/foundryvtt-service-ansible-role/
+- name: Setup wakeonlan
+  hosts: all
+
+  roles:
+    - role: wakeonlan
+      vars: 
+        eth_nic: "eno1"
+
+  tasks:
+    - name: Configure wakeonlan for ProxmoxNode
+      become: yes
+      shell: pvenode config set -wakeonlan 04:42:1a:25:a6:e0

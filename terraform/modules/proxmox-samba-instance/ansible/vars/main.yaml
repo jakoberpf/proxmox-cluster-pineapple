@@ -1,0 +1,17 @@
+usergroups:
+  - family
+  - admins
+
+users:
+  - {name: 'mainuser', groups: 'family, admins', smbpasswd: 'mainuser'}
+  - {name: 'otheruser', groups: 'family', smbpasswd: 'otheruser'}
+  - {name: 'thirduser', groups: 'family', smbpasswd: 'thirduser'}
+  - {name: 'userNotInGroups', groups: '', smbpasswd: 'userNotInGroups'}
+
+adminuser: mainuser # should be an existing one from above
+
+shared_folders:
+  - {name: 'Images', path: '/{{zfs.poolName}}/media/images'}
+  - {name: 'Music', path: '/{{zfs.poolName}}/media/music'}
+  - {name: 'Shared folder', path: '/{{zfs.poolName}}/personal/all'}
+  - {name: 'Shared Backup Folder', path: '/{{zfs.poolName}}/backup/all'}

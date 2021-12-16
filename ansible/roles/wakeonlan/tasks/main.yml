@@ -1,0 +1,14 @@
+- name: Create wakeonlan systemd service file
+  template:
+    src: templates/wol.service.j2
+    dest: /lib/systemd/system/wol.service
+
+- name: Start wol.service
+  systemd:
+    name: wol.service
+    state: started
+
+- name: reload service wol.serviced, in all cases
+  systemd:
+    name: wol.service
+    state: reloaded

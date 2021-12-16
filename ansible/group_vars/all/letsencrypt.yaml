@@ -1,0 +1,4 @@
+---
+# pve_ssl_letsencrypt: yes
+# certificate settings
+letsencrypt_account_email: "admin@erpf.de"

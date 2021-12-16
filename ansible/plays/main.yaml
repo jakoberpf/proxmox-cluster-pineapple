@@ -1,0 +1,22 @@
+---
+# Install and setup zerotier
+# - name: Include zerotier setup
+#   include: zerotier.yaml
+
+# Setup/Initilize proxmox
+- name: Include proxmox prepare initialisation
+  include: proxmox.pre.yml
+- name: Include proxmox initialisation
+  include: proxmox.yml
+
+# Install basic packages
+- name: Include basic packages
+  include: packages.yaml
+
+# Install timeshift and make a snapshot
+- name: Include timeshift setup
+  include: timeshift.yaml
+
+# Install and setup wakeonlan capabilities
+# - name: Include wakeonlan setup
+#   include: wakeonlan.yaml

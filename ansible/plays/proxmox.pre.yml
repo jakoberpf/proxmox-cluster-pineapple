@@ -1,0 +1,32 @@
+---
+- name: Preprare the development machine with basic settings, packages and networking
+  hosts: all
+
+  tasks:
+    - name: Remove Proxmox Enterprise repository
+      apt_repository:
+        repo: 'deb https://enterprise.proxmox.com/debian/pve bullseye pve-enterprise'
+        state: absent
+
+    - name: Use Proxmox free repository
+      apt_repository:
+        repo: 'deb http://download.proxmox.com/debian/pve bullseye pve-no-subscription'
+        state: present
+
+    - name: Update APT package cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 7200
+        
+    # echo -e "#$(cat /etc/apt/sources.list.d/pve-enterprise.list)" > /etc/apt/sources.list.d/pve-enterprise.list
+
+    - name: Install basic packages
+      become: yes
+      apt:
+        update_cache: yes
+        pkg:
+          - python3-jmespath
+        state: present
+      register: apt_action
+      retries: 100
+      until: apt_action is success or ('Failed to lock apt for exclusive operation' not in apt_action.msg and '/var/lib/dpkg/lock' not in apt_action.msg)

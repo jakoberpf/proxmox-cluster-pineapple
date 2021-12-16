@@ -1,0 +1,28 @@
+---
+- name: Preprare the development machine with basic packages
+  hosts: all
+
+  tasks:
+    - name: Install basic packages
+      become: yes
+      apt:
+        pkg:
+          - git
+          - nano
+          - htop
+          - curl
+        state: present
+      register: apt_action
+      retries: 100
+      until: apt_action is success or ('Failed to lock apt for exclusive operation' not in apt_action.msg and '/var/lib/dpkg/lock' not in apt_action.msg)
+
+    - name: Copy file with owner and permission, using symbolic representation
+      ansible.builtin.copy:
+        src: ../artifacts/cloud-init-templates/{{ item }}
+        dest: /var/lib/vz/template/iso/{{ item }}
+        # owner: root
+        # group: wheel
+        # mode: u=rw,g=r,o=r
+      with_items:
+        - create_ubuntu_desktop_template.sh
+        - create_ubuntu_server_template.sh

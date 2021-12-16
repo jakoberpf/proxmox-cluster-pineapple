@@ -1,0 +1,18 @@
+---
+- name: Configure Zerotier
+  hosts: all
+
+  roles:
+    - role: networking/zerotier
+      become: true 
+      vars:
+        zerotier_api_accesstoken: "{{ lookup('env', 'ZEROTIER_CENTRAL_TOKEN') }}"
+        zerotier_network_id: "{{ lookup('env', 'ZEROTIER_NETWORK_IDS') }}"
+        zerotier_register_short_hostname: true
+        zerotier_member_register_short_hostname: "Proxmox-Backup"
+        zerotier_member_description: "Managed by Ansible"
+        zerotier_member_identiy_private: "../artifacts/zerotier/identity.secret"
+        zerotier_member_identiy_public: "../artifacts/zerotier/identity.public"
+
+  # tasks:
+  # sudo timeshift --create --comments "Zerotier is installed and joined the management network"
