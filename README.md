@@ -19,12 +19,12 @@ zerotier-idtool generate identity.secret identity.public
 ### Setup SSH Access
 
 ```bash
-# get keys from vault with `./bin/scripts/vault.sh`
+# get keys from vault with `./bin/vault.sh`
 ssh-copy-id -i .ssh/<key-name> root@<host>
 ```
 
-## Runbook
+## Bootstrap
 
 ```bash
-./bin/run.sh
+make boostrap
 ```

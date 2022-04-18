@@ -30,10 +30,6 @@ runcmd:
   - mkdir -p /mnt/cephfs
   - systemctl enable cephfs.service
   - systemctl start cephfs.service
-  ## Setup Samba
-  - echo -e ${password_jakob} | (smbpasswd -sa jakoberpf)
-  - echo -e ${password_fabian} | (smbpasswd -sa fabianerpf)
-  - echo -e ${password_tobias} | (smbpasswd -sa tobiaserpf)
 
 write_files:
   # Zerotier

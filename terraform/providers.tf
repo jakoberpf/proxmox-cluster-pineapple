@@ -39,34 +39,14 @@ provider "remote" {
 }
 
 provider "remote" {
-  alias = "gateway1"
+  alias = "gateway"
   conn {
     user        = "ubuntu"
     private_key = file("../.ssh/automation")
-    host        = "0.gateway.dns.erpf.de"
+    host        = "primary.gateway.dns.erpf.de"
     sudo        = true
   }
 }
-
-# provider "remote" {
-#   alias = "gateway2"
-#   conn {
-#     user        = "ubuntu"
-#     private_key = file("../.ssh/automation")
-#     host        = "1.gateway.dns.erpf.de"
-#     sudo        = true
-#   }
-# }
-
-# provider "remote" {
-#   alias = "gateway3"
-#   conn {
-#     user        = "ubuntu"
-#     private_key = file("../.ssh/automation")
-#     host        = "2.gateway.dns.erpf.de"
-#     sudo        = true
-#   }
-# }
 
 provider "zerotier" {
   zerotier_central_token = var.zerotier_central_token
