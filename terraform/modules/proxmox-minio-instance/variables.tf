@@ -49,6 +49,11 @@ variable "cloudflare_account_id" {
   description = ""
 }
 
+variable "cloudflare_zone_id" {
+  type = string
+  description = ""
+}
+
 variable "cloudflare_api_key" {
   type = string
   description = ""

@@ -3,6 +3,7 @@ module "minio_glacier" {
   providers = {
     cloudflare = cloudflare
     proxmox    = proxmox
+    remote     = remote.proxmox
     zerotier   = zerotier
   }
   id                             = 110
@@ -16,6 +17,7 @@ module "minio_glacier" {
   ssh_secret_key                 = file("../.ssh/automation")
   ssh_authorized_keys            = var.authorized_keys
   cloudflare_account_id          = var.cloudflare_account_id
+  cloudflare_zone_id             = var.cloudflare_zone_id
   cloudflare_api_key             = var.cloudflare_api_key
   zerotier_network_id            = var.zerotier_network_id_development
   zerotier_ip_assignment         = "10.147.19.41"

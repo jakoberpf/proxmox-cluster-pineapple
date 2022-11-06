@@ -40,6 +40,11 @@ runcmd:
   - curl -o zerotier-join.sh https://raw.githubusercontent.com/jakoberpf/zerotier-scripts/main/zerotier-join.sh
   - chmod +x zerotier-join.sh
   - ZTNETWORK=${zerotier_network_id} ./zerotier-join.sh && rm ./zerotier-join.sh
+  # Setup Argo Tunnel
+  - wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+  - dpkg -i cloudflared-linux-amd64.deb
+  - rm cloudflared-linux-amd64.deb
+  - cloudflared service install
   # Setup Docker
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
   - add-apt-repository "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
@@ -66,6 +71,32 @@ write_files:
   - path: /var/lib/zerotier-one/identity.secret
     content: |
       ${zerotier_private_key}
+
+  - path: /etc/cloudflared/cert.json
+    content: |
+      {
+          "AccountTag"   : "${cloudflare_account_id}",
+          "TunnelID"     : "${argo_tunnel_id}",
+          "TunnelName"   : "${argo_tunnel_name}",
+          "TunnelSecret" : "${argo_secret}"
+      }
+
+  - path: /etc/cloudflared/cert.json
+    content: |
+      tunnel: ${argo_tunnel_id}
+      credentials-file: /etc/cloudflared/cert.json
+      logfile: /var/log/cloudflared.log
+      loglevel: info
+
+      ingress:
+        - hostname: glinio.erpf.de
+          service: http://localhost:9000
+        - hostname: glonsole.erpf.de
+          service: http://localhost:9001
+        - hostname: glault.erpf.de
+          service: http://localhost:9001
+        - hostname: "*"
+          service: hello-world
 
   # CephFS
   - path: /etc/systemd/system/cephfs.service
@@ -95,9 +126,9 @@ write_files:
           ports:
             - 8200:8200
           volumes:
-            - ./vault/logs:/vault/logs
-            - ./vault/file:/vault/file
-            - ./vault/config:/vault/config
+            - /mnt/cephfs/vault-glacier/logs:/vault/logs
+            - /mnt/cephfs/vault-glacier/file:/vault/file
+            - /mnt/cephfs/vault-glacier/config:/vault/config
 
         minio:
           image: minio/minio
@@ -113,68 +144,3 @@ write_files:
             - MINIO_BROWSER_REDIRECT_URL=https://console.glacier.erpf.de
             - MINIO_ROOT_USER=${minio_admin_user}
             - MINIO_ROOT_PASSWORD=${minio_admin_key}
-
-        caddy:
-          image: slothcroissant/caddy-cloudflaredns
-          container_name: caddy
-          restart: always
-          ports:
-            - 80:80
-            - 443:443
-          volumes:
-            - ./caddy/Caddyfile:/etc/caddy/Caddyfile
-            - ./caddy/config:/config
-            - ./caddy/data:/data
-          environment:
-            - CLOUDFLARE_EMAIL=accounts@jakoberpf.de       # The email address to use for ACME registration.
-            - CLOUDFLARE_API_TOKEN=${cloudflare_api_key}
-            - ACME_AGREE=true
-            - LOG_FILE=/data/access.log
-
-  - path: /minio/vault/config/vault.json
-    content: |
-        {
-          storage "file" {
-            path = "/data"
-          },
-          listener: {
-              tcp: {
-                  address: "0.0.0.0:8200",
-                  tls_disable: 1
-              }
-          },
-          api_addr: "http://0.0.0.0:8200",
-          ui: true
-        }
-
-  - path: /minio/caddy/Caddyfile
-    content: |
-      glacier.erpf.de {
-          reverse_proxy minio:9000
-          tls accounts@jakoberpf.de {
-              dns cloudflare ${cloudflare_api_key}
-          }
-          log {
-              output file /var/log/caddy/access.log
-          }
-      }
-
-      console.glacier.erpf.de {
-          reverse_proxy minio:9001
-          tls accounts@jakoberpf.de {
-              dns cloudflare ${cloudflare_api_key}
-          }
-          log {
-              output file /var/log/caddy/access.log
-          }
-      }
-
-      vault.glacier.erpf.de {
-          reverse_proxy vault:8200
-          tls accounts@jakoberpf.de {
-              dns cloudflare ${cloudflare_api_key}
-          }
-          log {
-              output file /var/log/caddy/access.log
-          }
-      }
