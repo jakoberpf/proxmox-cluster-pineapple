@@ -12,18 +12,3 @@ pve_ceph_mds_group: "all"
 pve_ceph_crush_rules:
   - name: replicated_rule
     type: osd
-
-# pve_ceph_pools:
-#   - name: vm-ceph
-#     pgs: 64
-#     rule: replicated_rule
-#     application: rbd
-#     autoscale_mode: "on"
-#     storage: true
-
-# pve_ceph_fs:
-#   - name: glacier
-#     pgs: 64
-#     rule: replicated_rule
-#     storage: true
-#     mountpoint: /srv/proxmox/glacier
