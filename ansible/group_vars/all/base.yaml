@@ -23,7 +23,7 @@ pve_users:
     email: jakoberpf@developer.local
     password: "jakoberpf"
     firstname: Jakob
-    lastname: Erpf
+    lastname: Boghdady
     comment: ""
     groups: [ "developers" ]
   - name: fabianerpf@pve
@@ -39,7 +39,7 @@ pve_acls:
     groups: [ "administrators" ]
   - path: /
     roles: [ "Terraform" ]
-    groups: [ "automation" ]
+    groups: [ "automation", "developers" ]
 pve_roles:
   - name: Monitoring
     privileges:
