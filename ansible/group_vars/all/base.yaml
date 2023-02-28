@@ -10,8 +10,15 @@ pve_groups:
   - name: automation
     comment: Automation Users
   - name: developers
-    comment: Developers
+    comment: Developer Users
 pve_users:
+  - name: packer@pve
+    email: packer@automation.local
+    password: "packer"
+    firstname: Packer
+    lastname: Automation User
+    comment: "This is the user for all packer automation scripts"
+    groups: [ "automation" ]
   - name: terraform@pve
     email: terraform@automation.local
     password: "terraform"
@@ -19,27 +26,19 @@ pve_users:
     lastname: Automation User
     comment: "This is the user for all terraform automation scripts"
     groups: [ "automation" ]
-  - name: jakoberpf@pve
-    email: jakoberpf@developer.local
-    password: "jakoberpf"
-    firstname: Jakob
-    lastname: Boghdady
-    comment: ""
-    groups: [ "developers" ]
-  - name: fabianerpf@pve
-    email: fabianerpf@developer.local
-    password: "fabianerpf"
-    firstname: Fabian
-    lastname: Erpf
-    comment: ""
-    groups: [ "developers" ]
 pve_acls:
   - path: /
     roles: [ "Administrator" ]
     groups: [ "administrators" ]
   - path: /
+    roles: [ "Monitoring" ]
+    groups: [ "developers" ]
+  - path: /
     roles: [ "Terraform" ]
-    groups: [ "automation", "developers" ]
+    groups: [ "automation" ]
+  - path: /
+    roles: [ "Packer" ]
+    groups: [ "automation" ]
 pve_roles:
   - name: Monitoring
     privileges:
@@ -65,6 +64,22 @@ pve_roles:
       - "VM.PowerMgmt"
       - "Datastore.AllocateSpace"
       - "Datastore.Audit"
+  - name: Packer
+    privileges:
+      - VM.Allocate 
+      - VM.Config.Disk 
+      - VM.Config.CPU
+      - VM.Config.Memory 
+      - Datastore.AllocateSpace 
+      - Sys.Modify 
+      - VM.Config.Options 
+      - VM.Audit 
+      - VM.Console 
+      - VM.Config.CDROM 
+      - VM.Config.Network 
+      - VM.PowerMgmt 
+      - VM.Config.HWType 
+      - VM.Monitor
 # pve_storages:
 #   - name: localdir
 #     type: dir
