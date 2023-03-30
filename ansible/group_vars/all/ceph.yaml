@@ -10,5 +10,9 @@ pve_ceph_mgr_group: "all"
 pve_ceph_mds_group: "all"
 
 pve_ceph_crush_rules:
-  - name: replicated_rule
+  - name: replicated_hdd
+    class: hdd
+    type: osd
+  - name: replicated_ssd
+    class: ssd
     type: osd
