@@ -1,5 +1,5 @@
 ---
-pve_group: backup
+pve_group: glacier
 pve_watchdog: ipmi
 # pve_ssl_private_key: "{{ lookup('file', pve_group + '/' + inventory_hostname + '.key') }}"
 # pve_ssl_certificate: "{{ lookup('file', pve_group + '/' + inventory_hostname + '.pem') }}"
@@ -18,7 +18,7 @@ pve_users:
     firstname: Packer
     lastname: Automation User
     comment: "This is the user for all packer automation scripts"
-    groups: [ "automation" ]
+    groups: [ "administrators", "automation" ]
   - name: terraform@pve
     email: terraform@automation.local
     password: "terraform"
@@ -66,19 +66,21 @@ pve_roles:
       - "Datastore.Audit"
   - name: Packer
     privileges:
-      - VM.Allocate 
-      - VM.Config.Disk 
+      - VM.Config.Disk
       - VM.Config.CPU
-      - VM.Config.Memory 
-      - Datastore.AllocateSpace 
-      - Sys.Modify 
-      - VM.Config.Options 
-      - VM.Audit 
-      - VM.Console 
-      - VM.Config.CDROM 
-      - VM.Config.Network 
-      - VM.PowerMgmt 
-      - VM.Config.HWType 
+      - VM.Config.Cloudinit
+      - VM.Clone
+      - VM.Config.Memory
+      - Datastore.AllocateSpace
+      - Sys.Modify
+      - VM.Config.Options
+      - VM.Console
+      - VM.Allocate
+      - VM.Audit
+      - VM.Config.CDROM
+      - VM.Config.Network
+      - VM.PowerMgmt
+      - VM.Config.HWType
       - VM.Monitor
 # pve_storages:
 #   - name: localdir

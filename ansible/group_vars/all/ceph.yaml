@@ -13,6 +13,6 @@ pve_ceph_crush_rules:
   - name: replicated_hdd
     class: hdd
     type: osd
-  - name: replicated_ssd
-    class: ssd
-    type: osd
+  # - name: replicated_ssd
+  #   class: ssd
+  #   type: osd

@@ -6,8 +6,8 @@
 # Setup/Initilize proxmox
 - name: Include proxmox prepare initialisation
   include: proxmox.pre.yml
-# - name: Include proxmox initialisation
-#   include: proxmox.yml
+- name: Include proxmox initialisation
+  include: proxmox.yml
 
 # Install basic packages
 - name: Include basic packages
