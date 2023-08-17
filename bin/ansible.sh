@@ -7,4 +7,4 @@ source $GIT_ROOT/.venv/ansible/bin/activate
 
 # Run ansible playbook
 cd $GIT_ROOT/ansible
-ansible-playbook plays/main.yaml
+ansible-playbook plays/main.yaml --vault-password-file .vault_pass
