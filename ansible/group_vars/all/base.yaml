@@ -14,14 +14,14 @@ pve_groups:
 pve_users:
   - name: packer@pve
     email: packer@automation.local
-    password: "packer"
+    password: "{{ proxmox_user_packer_password }}"
     firstname: Packer
     lastname: Automation User
     comment: "This is the user for all packer automation scripts"
     groups: [ "administrators", "automation" ]
   - name: terraform@pve
     email: terraform@automation.local
-    password: "terraform"
+    password: "{{ proxmox_user_terraform_password }}"
     firstname: Terraform
     lastname: Automation User
     comment: "This is the user for all terraform automation scripts"
