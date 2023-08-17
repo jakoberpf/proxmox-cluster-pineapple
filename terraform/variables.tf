@@ -66,5 +66,3 @@ variable "minio_glacier_admin_secret_key" {
   type        = string
   description = "The secret key for the glacier minio admin"
 }
-
-

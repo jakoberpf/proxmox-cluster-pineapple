@@ -29,4 +29,3 @@
     # - name: Setup timeshift snapshot device
     #   become: yes
     #   shell: timeshift --create --comments "A clean Ubuntu 20.04LTS install with basic packages and settings"
-

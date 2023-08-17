@@ -3,6 +3,6 @@
   hosts: glacier
 
   roles:
-    - role: hypervisor/proxmox 
-      vars: 
+    - role: hypervisor/proxmox
+      vars:
         pve_reboot_on_kernel_update: false

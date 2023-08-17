@@ -4,7 +4,7 @@
 
 #   roles:
 #     - role: networking/zerotier
-#       become: true 
+#       become: true
 #       vars:
 #         zerotier_api_accesstoken: "{{ lookup('env', 'ZEROTIER_CENTRAL_TOKEN') }}"
 #         zerotier_network_id: "{{ lookup('env', 'ZEROTIER_NETWORK_IDS') }}"

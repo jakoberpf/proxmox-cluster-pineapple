@@ -20,3 +20,7 @@
 # Install and setup wakeonlan capabilities
 # - name: Include wakeonlan setup
 #   include: wakeonlan.yaml
+
+# Install github-runner
+- name: Include github-runner setup
+  include: github-runner.yaml

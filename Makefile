@@ -1,12 +1,12 @@
-banner:
+banner: # Typo: Allogator2 from https://manytools.org/hacker-tools/ascii-banner/
 	@echo "##########################################################################"
 	@echo "##                                                                      ##"
-	@echo "##  :::::::::      :::      ::::::::  :::    ::: :::    ::: :::::::::   ##" 
+	@echo "##  :::::::::      :::      ::::::::  :::    ::: :::    ::: :::::::::   ##"
 	@echo "##  :+:    :+:   :+: :+:   :+:    :+: :+:   :+:  :+:    :+: :+:    :+:  ##"
-	@echo "##  +:+    +:+  +:+   +:+  +:+        +:+  +:+   +:+    +:+ +:+    +:+  ##" 
+	@echo "##  +:+    +:+  +:+   +:+  +:+        +:+  +:+   +:+    +:+ +:+    +:+  ##"
 	@echo "##  +#++:++#+  +#++:++#++: +#+        +#++:++    +#+    +:+ +#++:++#+   ##"
 	@echo "##  +#+    +#+ +#+     +#+ +#+        +#+  +#+   +#+    +#+ +#+         ##"
-	@echo "##  #+#    #+# #+#     #+# #+#    #+# #+#   #+#  #+#    #+# #+#         ##"   
+	@echo "##  #+#    #+# #+#     #+# #+#    #+# #+#   #+#  #+#    #+# #+#         ##"
 	@echo "##  #########  ###     ###  ########  ###    ###  ########  ###         ##"
 	@echo "##                                                                      ##"
 	@echo "##########################################################################"
@@ -24,5 +24,5 @@ terraform: banner vault
 	@echo "[terraform] Creating proxmox resources with terraform"
 	@./bin/terraform.sh
 
-deploy: banner ansible terraform 
+deploy: banner ansible terraform
 	@echo "[deploy] Finished bootstrapping proxmox cluster"
