@@ -12,11 +12,28 @@
     - github_runner_force_confguration: true
 
   tasks:
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/debian/gpg
+        state: present
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/debian bullseye stable
+        state: present
+
+    - name: Update apt and install docker-ce
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: true
+
     - name: Create a github-runner user # https://serversforhackers.com/c/create-user-in-ansible
       ansible.builtin.user:
         name: github-runner
         groups:
           - sudo
+          - docker
         state: present
 
 # curl -L \
@@ -59,7 +76,7 @@
       register: github_runner_service_status_systemd
 
     - name: Get github runner service state from service executable
-      ansible.builtin.command: 
+      ansible.builtin.command:
         cmd: ./svc.sh status
       args:
         chdir: /home/github-runner/packer-proxmox-templates
@@ -78,15 +95,15 @@
     # The runner is not configured, so we first have to configure it
 
     - name: If not configured, run a curl request to create a registration token
-      ansible.builtin.command:  
+      ansible.builtin.command:
         cmd: "curl -L -X POST -H 'Accept: application/vnd.github+json' -H 'Authorization: Bearer {{ github_token }}' -H 'X-GitHub-Api-Version: 2022-11-28' {{ github_api }}/repos/{{ github_repo }}/actions/runners/registration-token"
       # when: "not github_runner_service_executable_exists.stat.exists or github_runner_force_confguration"
-      register: create_registration_token_response  
+      register: create_registration_token_response
 
     - name: If not configured, try running configuration
       become: yes
       become_user: github-runner
-      ansible.builtin.command: 
+      ansible.builtin.command:
         cmd: ./config.sh --url https://github.com/jakoberpf/packer-proxmox-templates --token {{ (create_registration_token_response.stdout|from_json).token }} --name {{ inventory_hostname }} --labels {{ github_runner_labels }} --runnergroup default --work _work --runasservice --unattended
       args:
         chdir: /home/github-runner/packer-proxmox-templates
@@ -95,20 +112,20 @@
       ignore_errors: True
 
     # - name: Set fact if configuration command failed because already configured
-    #   set_fact: 
+    #   set_fact:
     #     github_runner_config_flag: failed_because_already_configured
     #   when: "(not github_runner_service_executable_exists.stat.exists) and ('Cannot configure the runner because it is already configured.' in github_runner_config_result.stderr)"
 
     # - name: If already configured, run a curl request to create a remove token
-    #   ansible.builtin.command:  
+    #   ansible.builtin.command:
     #     cmd: "curl -L -X POST -H 'Accept: application/vnd.github+json' -H 'Authorization: Bearer {{ github_token }}' -H 'X-GitHub-Api-Version: 2022-11-28' {{ github_api }}/repos/{{ github_repo }}/actions/runners/registration-token"
     #   when: ((github_runner_config_flag is defined) and (github_runner_config_flag == 'failed_because_already_configured')) or github_runner_force_confguration
-    #   register: create_remove_token_response  
+    #   register: create_remove_token_response
 
     # - name: If already configured, run the remove command
     #   become: yes
     #   become_user: github-runner
-    #   ansible.builtin.command: 
+    #   ansible.builtin.command:
     #     cmd: ./config.sh remove --url https://github.com/jakoberpf/packer-proxmox-templates --token {{ (create_remove_token_response.stdout|from_json).token }}
     #   args:
     #     chdir: /home/github-runner/packer-proxmox-templates
@@ -117,7 +134,7 @@
     # - name: Try running the configuration command
     #   become: yes
     #   become_user: github-runner
-    #   ansible.builtin.command: 
+    #   ansible.builtin.command:
     #     cmd: ./config.sh --url https://github.com/jakoberpf/packer-proxmox-templates --token {{ (create_registration_token_response.stdout|from_json).token }} --name {{ inventory_hostname }} --labels {{ github_runner_labels }} --runnergroup default --work _work --runasservice --unattended
     #   args:
     #     chdir: /home/github-runner/packer-proxmox-templates
@@ -132,7 +149,7 @@
     # The runnner should be configured now.
 
     - name: Try to install github runner service
-      ansible.builtin.command: 
+      ansible.builtin.command:
         cmd: ./svc.sh install github-runner
       args:
         chdir: /home/github-runner/packer-proxmox-templates
@@ -141,13 +158,10 @@
       ignore_errors: True
 
     - name: Try to start github runner service
-      ansible.builtin.command: 
+      ansible.builtin.command:
         cmd: ./svc.sh start
       args:
         chdir: /home/github-runner/packer-proxmox-templates
       # when: github_runner_service_status.status.ActiveState != 'active'
       register: github_runner_service_start
       ignore_errors: True
-
-# ./config.sh --url https://github.com/jakoberpf/packer-proxmox-templates --token  --name glacier --labels pineapple --work _work --runnergroup default --runasservice
-# ./config.sh --check --url https://github.com/jakoberpf/packer-proxmox-templates
