@@ -4,14 +4,14 @@ on:
   push:
     branches:
       - main
-    paths:
-      - ansible/**
-      - terraform/**
-  pull_request:
-    branches:
-      - main
-    paths:
-      - terraform/**
+    # paths:
+    #   - ansible/**
+    #   - terraform/**
+  # pull_request:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - terraform/**
 
 permissions: write-all
 
