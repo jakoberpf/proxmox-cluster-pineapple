@@ -31,6 +31,13 @@ jobs:
       - name: Checkout the repository to the runner
         uses: actions/checkout@v3
 
+      - name: ZeroTier - Proxmox
+        uses: jakoberpf/github-action-zerotier@main # zerotier/github-action@v1.0.1
+        with:
+          network_id: ${{ secrets.ZEROTIER_NETWORK_ID_PROXMOX }}
+          auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
+          api_url: ${{ secrets.ZEROTIER_API_URL }}
+
       - name: Set up Python 3.8
         uses: actions/setup-python@v4
         with:
