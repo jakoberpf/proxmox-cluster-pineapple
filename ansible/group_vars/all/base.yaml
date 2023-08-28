@@ -11,21 +11,6 @@ pve_groups:
     comment: Automation Users
   - name: developers
     comment: Developer Users
-pve_users:
-  - name: packer@pve
-    email: packer@automation.local
-    password: "{{ proxmox_user_packer_password }}"
-    firstname: Packer
-    lastname: Automation User
-    comment: "This is the user for all packer automation scripts"
-    groups: [ "administrators", "automation" ]
-  - name: terraform@pve
-    email: terraform@automation.local
-    password: "{{ proxmox_user_terraform_password }}"
-    firstname: Terraform
-    lastname: Automation User
-    comment: "This is the user for all terraform automation scripts"
-    groups: [ "automation" ]
 pve_acls:
   - path: /
     roles: [ "Administrator" ]
