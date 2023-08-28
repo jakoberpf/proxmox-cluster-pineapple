@@ -58,7 +58,6 @@ jobs:
         uses: dawidd6/action-ansible-playbook@v2
         with:
           playbook: plays/main.yml
-          directory: ./ansible
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           inventory: |
             [all]
@@ -74,9 +73,6 @@ jobs:
             
             [storage]
             glacier
-          # Optional, SSH known hosts file content
-          # known_hosts: |
-          #   example.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
           # Optional, encrypted vault password
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
           # Optional, galaxy requirements filepath
