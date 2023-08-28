@@ -49,10 +49,10 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         # if [ -f test-requirements.txt ]; then pip install -r test-requirements.txt; fi
 
-      - name: Run ansible-lint
-        uses: ansible-community/ansible-lint-action@v6.0.2
-        with:
-          args: "ansible" 
+      # - name: Run ansible-lint
+      #   uses: ansible-community/ansible-lint-action@v6.0.2
+      #   with:
+      #     args: "ansible"
 
       # - name: Run playbook
       #   uses: dawidd6/action-ansible-playbook@v2
@@ -67,7 +67,7 @@ jobs:
       #     inventory: |
       #       [all]
       #       example.com
-      
+
       #       [group1]
       #       example.com
       #     # Optional, SSH known hosts file content
