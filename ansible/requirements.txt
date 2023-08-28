@@ -1,5 +1,5 @@
 ansible==8.2.0
 ansible-lint==6.0.2
-dnspython
-jmespath
-netaddr
+dnspython==2.4.2
+jmespath==1.0.1
+netaddr==0.8.0
