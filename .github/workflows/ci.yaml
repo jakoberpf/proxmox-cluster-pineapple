@@ -58,8 +58,8 @@ jobs:
         uses: dawidd6/action-ansible-playbook@v2
         with:
           playbook: plays/main.yml
-          directory: ./
-          key: ${{secrets.SSH_PRIVATE_KEY}}
+          directory: ./ansible
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           inventory: |
             [all]
             glacier   ansible_host=172.30.119.142  ansible_user=root
@@ -78,7 +78,7 @@ jobs:
           # known_hosts: |
           #   example.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
           # Optional, encrypted vault password
-          vault_password: ${{secrets.ANSIBLE_VAULT_PASSWORD}}
+          vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
           # Optional, galaxy requirements filepath
           # requirements: galaxy-requirements.yml
           # Optional, additional flags to pass to ansible-playbook
@@ -91,6 +91,8 @@ jobs:
   # terraform:
   #   name: "Terraform Testing, Validation, Scanning and Deployment"
   #   runs-on: ubuntu-latest
+  #   if: ${{ always() }}
+  #   needs: ansible
   #   defaults:
   #     run:
   #       shell: bash
