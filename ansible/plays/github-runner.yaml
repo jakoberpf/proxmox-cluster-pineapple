@@ -1,6 +1,6 @@
 ---
 - name: Preprare the development machine with basic packages
-  hosts: all
+  hosts: glacier
   # serial: 1
   vars:
     - github_api: https://api.github.com
@@ -34,6 +34,7 @@
         groups:
           - sudo
           - docker
+        generate_ssh_key: true
         state: present
 
 # curl -L \
@@ -88,9 +89,9 @@
         path: /home/github-runner/packer-proxmox-templates/svc.sh
       register: github_runner_service_executable_exists
 
-    - name: debugging
-      ansible.builtin.debug:
-        msg: "{{ github_runner_service_executable_exists }}"
+    # - name: debugging
+    #   ansible.builtin.debug:
+    #     msg: "{{ github_runner_service_executable_exists }}"
 
     # The runner is not configured, so we first have to configure it
 
