@@ -5,17 +5,17 @@
 
 # Setup/Initilize proxmox
 - name: Include proxmox prepare initialisation
-  include: proxmox.pre.yml
+  import_playbook: proxmox.pre.yml
 - name: Include proxmox initialisation
-  include: proxmox.yml
+  import_playbook: proxmox.yml
 
 # Install basic packages
 - name: Include basic packages
-  include: packages.yaml
+  import_playbook: packages.yaml
 
 # Install timeshift and make a snapshot
 - name: Include timeshift setup
-  include: timeshift.yaml
+  import_playbook: timeshift.yaml
 
 # Install and setup wakeonlan capabilities
 # - name: Include wakeonlan setup
@@ -23,4 +23,4 @@
 
 # Install github-runner
 - name: Include github-runner setup
-  include: github-runner.yaml
+  import_playbook: github-runner.yaml
