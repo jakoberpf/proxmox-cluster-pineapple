@@ -58,7 +58,10 @@ jobs:
         uses: shimataro/ssh-key-action@v2
         with:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+          known_hosts: | # ${{ secrets.KNOWN_HOSTS }}
+            172.30.119.190,compute-1 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCYGcfVxYUmzrHFr9VsTJd6XhONOSJnDUely8ZqZZBFdIGc5u/3RMf9DFvsgNVlrjvGT9yXQi9lCN447pV631SmWoBxQJWonaUF/WIIP4CxR5EEjl0+/SXmP7vfKx2K7nvu+aDwLsO9xO9pBZmtKmxX3SGENmtUyW9lEPytg2mJ+o9Tq4Lv4XJ8o7V6Cl1OJW+1n7OY1K+AqBJ06qZFoKw823julvX824HGkFX8BuH1QZrkpuqg3c0Yj8ZE4KYBqm9HOqIKFFAR/EBoo0oWWg6TuKmgSEpNE77PY5U0+UaIWJ0ZkGHW4K7tOOYRSPP/XRrQzg+h4y5LTDUXyEJBS6Lt root@compute-1
+            172.30.119.87,compute-2 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCmaOq3RrSwtIctVLRfUjqT7LvmFfLfh7nybgusNiTeIHxKPfaZNUoecKcbf8GyfunD3XyuN3KMxGwV/qdPQzSP8LFojKYlGqLv+C56grS2vBLnpc4qRCZvizL6KTerIw6h5kKIkRPQk680r67iEQHyqVUuNYhGi/A8aulYIudTtNRoCRxPs+UomcMNLFz9xTSMYsuK5RNOwPe16/6bs05LdPR1DpWNtC/r8fAVhpmOJUZk2QkcQAA4mmMzGA3pwnha+CL5OXEU7bbTBxmjDahMyySrfxrlDgevb1Pl6CoOl18/udyA9M2hF5fG+4vYg6dvcQdUTe1n/ezKGy3DrdSb root@compute-2
+            172.30.119.79,compute-3 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDCrCJiFjptA81NjpjvqiB31zeOdBQPqvlxH99uQoYdhJBb1Rxarnif+JnL0x156qzEaBZs0YzdWglJclmMsfLOl5/tlL+EEpSSGF+FYncPl6p94XINQ6XsnHIeyvBlm7coqgticVKHVSZB5iRnqhF7ySHTm0bYFw+7A65iaakIDoI7WFWck/jFEZ73lqMFsqwW/LVMLurcTxGI41/ZCtTPo48uwi2JMZdLmIKmZpT8qez/7Pa8sQmSXgmDwt8rToVvbR2LTM4YXPfFHrwZxHr6mraumam36E1mFetrlb5LXVa+tvZFXBDcvTxr13VIa1eR2rqOCAlaCZd8Way6rni5 root@compute-3
           if_key_exists: fail # replace / ignore / fail; optional (defaults to fail)
 
       - name: Run ansible playbook
