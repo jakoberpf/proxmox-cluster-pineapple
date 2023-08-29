@@ -66,6 +66,7 @@ jobs:
 
       - name: Run ansible playbook
         run: |
+          echo "${{ secrets.ANSIBLE_VAULT_PASSWORD }}" > .vault_pass
           ansible-playbook plays/main.yaml --vault-password-file .vault_pass
 
       # - name: Run playbook
