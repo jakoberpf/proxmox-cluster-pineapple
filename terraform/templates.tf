@@ -1,4 +1,4 @@
-resource "local_file" "ssh_config" {
+/* resource "local_file" "ssh_config" {
   content = templatefile("${path.module}/templates/config.tpl",
     {
       node-ip = [
@@ -20,4 +20,4 @@ resource "local_file" "ssh_config" {
     }
   )
   filename = "${path.root}/../.ssh/config"
-}
+} */

@@ -21,7 +21,7 @@ users:
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     ssh_authorized_keys:
       - ${ssh_key}
- 
+
 packages:
   - apt-transport-https
   - ca-certificates
@@ -95,7 +95,7 @@ write_files:
     content: |
       discovery-url: https://iam.erpf.de/auth/realms/infrastructure
       client-id: gatekeeper
-      client-secret: 
+      client-secret:
       listen: :3000
       enable-refresh-tokens: false
       redirection-url: http://127.0.0.1:3000

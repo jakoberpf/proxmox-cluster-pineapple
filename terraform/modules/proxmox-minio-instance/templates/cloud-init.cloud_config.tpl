@@ -120,7 +120,7 @@ write_files:
           image: vault
           container_name: vault
           restart: always
-          entrypoint: vault server -config=/vault/config/vault.json  
+          entrypoint: vault server -config=/vault/config/vault.json
           cap_add:
             - IPC_LOCK
           ports:

@@ -3,16 +3,19 @@ terraform {
   required_providers {
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "3.8.0"
+      version = "~> 3.8.0"
     }
     proxmox = {
-      source = "telmate/proxmox"
+      source  = "telmate/proxmox"
+      version = "~> 2.9.14"
     }
     remote = {
       source  = "tenstad/remote"
+      version = "~> 0.1.2"
     }
     zerotier = {
-      source = "zerotier/zerotier"
+      source  = "zerotier/zerotier"
+      version = "~> 1.4.2"
     }
   }
 }
@@ -29,21 +32,38 @@ provider "proxmox" {
 }
 
 provider "remote" {
-  alias = "proxmox"
+  alias = "compute-1"
   conn {
     user        = "root"
     private_key = file("../.ssh/automation")
-    host        = "10.147.19.79"
+    host        = "172.30.119.190"
   }
 }
 
 provider "remote" {
-  alias = "gateway"
+  alias = "compute-2"
   conn {
-    user        = "ubuntu"
+    user        = "root"
     private_key = file("../.ssh/automation")
-    host        = "primary.gateway.dns.erpf.de"
-    sudo        = true
+    host        = "172.30.119.87"
+  }
+}
+
+provider "remote" {
+  alias = "compute-3"
+  conn {
+    user        = "root"
+    private_key = file("../.ssh/automation")
+    host        = "172.30.119.79"
+  }
+}
+
+provider "remote" {
+  alias = "glacier"
+  conn {
+    user        = "root"
+    private_key = file("../.ssh/automation")
+    host        = "172.30.119.142"
   }
 }
 

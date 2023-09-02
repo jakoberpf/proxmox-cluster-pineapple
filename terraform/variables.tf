@@ -66,3 +66,11 @@ variable "minio_glacier_admin_secret_key" {
   type        = string
   description = "The secret key for the glacier minio admin"
 }
+
+variable "automation_user_password" {
+  type = string
+}
+
+variable "github_runner_user_password" {
+  type = string
+}

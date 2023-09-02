@@ -8,7 +8,7 @@ data "template_file" "cloud_init" {
 
     minio_admin_user     = var.minio_glacier_admin_access_key
     minio_admin_key      = var.minio_glacier_admin_secret_key
-    
+
     zerotier_network_id  = var.zerotier_network_id
     zerotier_public_key  = zerotier_identity.this.public_key
     zerotier_private_key = zerotier_identity.this.private_key

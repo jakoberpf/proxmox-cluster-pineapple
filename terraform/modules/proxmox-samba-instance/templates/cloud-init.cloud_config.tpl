@@ -14,7 +14,7 @@ packages:
   - ceph-common
   - ceph-fuse
   - samba
-  
+
 runcmd:
   - systemctl start qemu-guest-agent
   # Setup Zerotier
