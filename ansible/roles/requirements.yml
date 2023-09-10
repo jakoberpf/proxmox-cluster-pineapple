@@ -1,0 +1,3 @@
+---
+- src: jakoberpf.proxmox
+  version: v1.6.9
