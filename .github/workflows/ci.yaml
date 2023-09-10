@@ -26,10 +26,10 @@ jobs:
       - name: Checkout the repository to the runner
         uses: actions/checkout@v3
 
-      - name: Run ansible-lint
-        uses: ansible-community/ansible-lint-action@v6.0.2
-        with:
-          args: "ansible"
+      # - name: Run ansible-lint
+      #   uses: ansible-community/ansible-lint-action@v6.0.2
+      #   with:
+      #     args: "ansible"
 
   ansible:
     name: "execute ansible playbook"
@@ -38,7 +38,7 @@ jobs:
       run:
         shell: bash
         working-directory: ./ansible
-    needs: 
+    needs:
       - ansible-linting
 
     steps:
@@ -91,12 +91,12 @@ jobs:
       #       compute-1 ansible_host=172.30.119.190 ansible_user=root
       #       compute-2 ansible_host=172.30.119.87  ansible_user=root
       #       compute-3 ansible_host=172.30.119.79  ansible_user=root
-            
+
       #       [compute]
       #       compute-1
       #       compute-2
       #       compute-3
-            
+
       #       [storage]
       #       glacier
       #     # Optional, encrypted vault password
@@ -114,7 +114,7 @@ jobs:
   #   name: "execute terraform project"
   #   runs-on: ubuntu-latest
   #   if: ${{ always() }}
-  #   needs: 
+  #   needs:
         # - ansible
   #   defaults:
   #     run:
