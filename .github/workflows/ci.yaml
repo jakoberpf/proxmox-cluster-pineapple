@@ -19,9 +19,12 @@ env:
   TF_LOG: INFO
 
 jobs:
-  ansible-linting:
-    name: "lint ansible project"
-    runs-on: "ubuntu-latest"
+  ansible:
+    name: "execute ansible playbook"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./ansible
     steps:
       - name: Checkout the repository to the runner
         uses: actions/checkout@v3
@@ -30,20 +33,6 @@ jobs:
       #   uses: ansible-community/ansible-lint-action@v6.0.2
       #   with:
       #     args: "ansible"
-
-  ansible:
-    name: "execute ansible playbook"
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: ./ansible
-    needs:
-      - ansible-linting
-
-    steps:
-      - name: Checkout the repository to the runner
-        uses: actions/checkout@v3
 
       - name: ZeroTier - Proxmox
         uses: jakoberpf/github-action-zerotier@main # zerotier/github-action@v1.0.1
@@ -121,17 +110,32 @@ jobs:
   terraform:
     name: "execute terraform project"
     runs-on: ubuntu-latest
-    if: ${{ always() }}
-    needs:
-      - ansible
     defaults:
       run:
-        shell: bash
         working-directory: ./terraform
+    needs:
+      - ansible
 
     steps:
       - name: Checkout the repository to the runner
         uses: actions/checkout@v3
+
+      - name: Lint Terraform
+        uses: actionshub/terraform-lint@main
+
+      - name: ZeroTier - Proxmox
+        uses: jakoberpf/github-action-zerotier@main # zerotier/github-action@v1.0.1
+        with:
+          network_id: ${{ secrets.ZEROTIER_NETWORK_ID_PROXMOX }}
+          auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
+          api_url: ${{ secrets.ZEROTIER_API_URL }}
+
+      - name: Install ansible and dependencies
+        run: |
+          ping -c 4 172.30.119.142 # glacier
+          ping -c 4 172.30.119.190 # compute-1
+          ping -c 4 172.30.119.87  # compute-2
+          ping -c 4 172.30.119.79  # compute-3
 
       - name: Set up Python 3.8
         uses: actions/setup-python@v4
