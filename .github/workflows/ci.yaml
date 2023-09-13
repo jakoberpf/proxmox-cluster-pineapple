@@ -25,6 +25,7 @@ jobs:
     defaults:
       run:
         working-directory: ./ansible
+    concurrency: ansible
     steps:
       - name: Checkout the repository to the runner
         uses: actions/checkout@v3
@@ -34,14 +35,14 @@ jobs:
       #   with:
       #     args: "ansible"
 
-      - name: ZeroTier - Proxmox
+      - name: Setup zerotier network for proxmox nodes
         uses: jakoberpf/github-action-zerotier@main # zerotier/github-action@v1.0.1
         with:
           network_id: ${{ secrets.ZEROTIER_NETWORK_ID_PROXMOX }}
           auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
           api_url: ${{ secrets.ZEROTIER_API_URL }}
 
-      - name: Install ansible and dependencies
+      - name: Verify reachability to proxmox nodes
         run: |
           ping -c 4 172.30.119.142 # glacier
           ping -c 4 172.30.119.190 # compute-1
@@ -76,43 +77,13 @@ jobs:
           echo "${{ secrets.ANSIBLE_VAULT_PASSWORD }}" > .vault_pass
           ansible-playbook plays/main.yaml --vault-password-file .vault_pass
 
-      # - name: Run playbook
-      #   uses: dawidd6/action-ansible-playbook@v2
-      #   with:
-      #     playbook: plays/main.yml
-      #     directory: ansible
-      #     key: ${{ secrets.SSH_PRIVATE_KEY }}
-      #     inventory: |
-      #       [all]
-      #       glacier   ansible_host=172.30.119.142  ansible_user=root
-      #       compute-1 ansible_host=172.30.119.190 ansible_user=root
-      #       compute-2 ansible_host=172.30.119.87  ansible_user=root
-      #       compute-3 ansible_host=172.30.119.79  ansible_user=root
-
-      #       [compute]
-      #       compute-1
-      #       compute-2
-      #       compute-3
-
-      #       [storage]
-      #       glacier
-      #     # Optional, encrypted vault password
-      #     vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-      #     # Optional, galaxy requirements filepath
-      #     # requirements: galaxy-requirements.yml
-      #     # Optional, additional flags to pass to ansible-playbook
-      #     # options: |
-      #     #   --inventory .hosts
-      #     #   --limit group1
-      #     #   --extra-vars hello=there
-      #     #   --verbose
-
   terraform:
     name: "execute terraform project"
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./terraform
+    concurrency: terraform
     needs:
       - ansible
 
@@ -123,26 +94,26 @@ jobs:
       - name: Lint Terraform
         uses: actionshub/terraform-lint@main
 
-      - name: ZeroTier - Proxmox
+      - name: Setup zerotier network for proxmox nodes
         uses: jakoberpf/github-action-zerotier@main # zerotier/github-action@v1.0.1
         with:
           network_id: ${{ secrets.ZEROTIER_NETWORK_ID_PROXMOX }}
           auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
           api_url: ${{ secrets.ZEROTIER_API_URL }}
 
-      - name: Install ansible and dependencies
+      - name: Verify reachability to proxmox nodes
         run: |
           ping -c 4 172.30.119.142 # glacier
           ping -c 4 172.30.119.190 # compute-1
           ping -c 4 172.30.119.87  # compute-2
           ping -c 4 172.30.119.79  # compute-3
 
-      - name: Set up Python 3.8
+      - name: Set up python
         uses: actions/setup-python@v4
         with:
           python-version: 3.8
 
-      - name: Setup Terraform with specified version on the runner
+      - name: Setup terraform
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.3.0
@@ -150,7 +121,7 @@ jobs:
       - name: Setup SOPS with binary installer
         uses: mdgreenwald/mozilla-sops-action@v1.4.1
 
-      - name: Decrypt Terraform backend configuration with SOPS
+      - name: Decrypt terraform backend configuration with SOPS
         run: sops --decrypt backend.conf.enc > backend.conf
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
