@@ -52,6 +52,13 @@ jobs:
           auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
           api_url: ${{ secrets.ZEROTIER_API_URL }}
 
+      - name: Install ansible and dependencies
+        run: |
+          ping -c 4 172.30.119.142 # glacier
+          ping -c 4 172.30.119.190 # compute-1
+          ping -c 4 172.30.119.87  # compute-2
+          ping -c 4 172.30.119.79  # compute-3
+
       - name: Set up Python 3.9
         uses: actions/setup-python@v4
         with:
